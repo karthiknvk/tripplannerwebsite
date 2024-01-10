@@ -1,0 +1,49 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div>
+  mainpackagedict
+  {{mainpackagedict}}
+</div>
+<div>
+  temppackagedict
+  {{temppackagedict}}
+</div>
+<div>
+  {{day}}
+</div>
+<div>
+  {{district}}
+</div>
+<main class="content">
+  <div class="row">
+    {% for packagecode,packagedetailslist in temppackagedict.items %}
+    <div class="col-12 col-md-4 col-sm-6">
+    
+    <h4>Package:{{packagecode}}</h4></li>
+      <div class="card">
+        {% for package in packagedetailslist %}
+        <img
+          class="card-img-top"
+          src="{{package.10.url}}"
+          alt="Unsplash"
+        />
+        <div class="card-header">
+          <h5 class="card-title mb-0">{{ package.5 }}</h5>
+        </div>
+        <div class="card-body">
+          <p class="card-text">
+            Description :{{package.9}}
+          </p>
+          
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+        {% endfor %}
+      </div>
+    
+    </div> 
+    {% endfor %}
+  </div>
+ 
+</main>
+{% endblock %}
