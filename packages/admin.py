@@ -4,11 +4,4 @@ from .models import Destination,Onedaypackage,Twodaypackage,Threedaypackage,Four
 # Register your models here.
 
 admin.site.register(Destination)
-admin.site.register(Onedaypackage)
-admin.site.register(Twodaypackage)
-admin.site.register(Threedaypackage)
-admin.site.register(Fourdaypackage)
-admin.site.register(Fivedaypackage)
-admin.site.register(Sixdaypackage)
-admin.site.register(Sevendaypackage)
 admin.site.register(Tourpackage)

@@ -12,6 +12,7 @@ urlpatterns=[
   path('accountview',views.accountview,name='accountview'),
   path('aboutview',views.aboutview,name='aboutview'),
   path('landscapeview',views.landscapeview,name='landscapeview'),
+  path('itineraryview',views.itineraryview,name='itineraryview'),
   
   #path('budgetview',views.budgetview,name='budgetview'),#budgetview=is path given in url,name=budgetviewpackages=is name used to refer it in other places
   #path('destinationview',views.destinationview,name='destinationview'),
