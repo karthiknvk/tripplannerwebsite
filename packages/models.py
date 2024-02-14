@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class Destination(models.Model):
   spotname=models.CharField(max_length=100)
+  spotdistrict=models.CharField(max_length=100)
   location=models.CharField(max_length=100)
   landscape=models.CharField(max_length=100)
   cafespot=models.CharField(max_length=100)

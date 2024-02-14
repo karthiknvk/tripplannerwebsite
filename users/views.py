@@ -27,19 +27,19 @@ def signupview(request):
     if password1==password2:
       if CustomUser.objects.filter(username=username).exists():
         print('user name exist already')
-        messages.warning(request,"Username exist")
-        return redirect("index")
+        messages.error(request,"Username exist")
+        return redirect("/")
       else:
         if CustomUser.objects.filter(email=email).exists():
           print('email exist already')
-          messages.warning(request,"Email exist")
-          return redirect("index")
+          messages.error(request,"Email exist")
+          return redirect("/")
         else:
           user=CustomUser.objects.create_user(username=username,password=password1,email=email)
           user.save()
           print('user created')
           messages.success(request,"Account created")
-          return redirect("/")
+          return redirect("login")
     else:
       messages.error(request,"Password not matching")
       print("password not matching")
@@ -68,7 +68,7 @@ def loginview(request):
     else:
       print("invalid credentials")
       messages.error(request, 'Invalid credentials')
-      return redirect('/')
+      return redirect('login')
     
   else:
     django_messages = messages.get_messages(request)
