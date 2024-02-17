@@ -9,18 +9,22 @@
         <div class="row">
           {% for time_key,time_key_items in day_key_items.items %}
             <div class="col-12 col-md-4 col-sm-6">
-              <div class="card">
-                <img
-                  class="card-img-top"
-                  src="{{time_key_items.10.url}}"
-                  alt="Unsplash"
-                />
-                <div class="card-header">
-                  <h5 class="card-title mb-0" style="text-align: center">
-                    {{time_key_items.5}}
-                  </h5>
+              <a href="{% url 'spotdetailsview' time_key_items.5 %}">
+                <!--a href="spotdetailsview" time_key_items.5"-->
+                <div class="card">
+                  <img
+                    class="card-img-top"
+                    src="{{time_key_items.10.url}}"
+                    alt="Unsplash"
+                  />
+                  <div class="card-header">
+                    <h5 class="card-title mb-0" style="text-align: center">
+                      {{time_key_items.5}}
+                    </h5>
+                  </div>
                 </div>
-              </div>
+              </a>
+              
             </div>
           {% endfor %}
         </div>
@@ -110,4 +114,5 @@
     </div>
   </div>
 </main>
+
 {% endblock %}

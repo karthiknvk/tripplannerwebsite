@@ -12,8 +12,8 @@ urlpatterns=[
   path('accountview',views.accountview,name='accountview'),
   path('aboutview',views.aboutview,name='aboutview'),
   path('landscapeview',views.landscapeview,name='landscapeview'),
-  path('itineraryview',views.itineraryview,name='itineraryview'),
-  
+  path('itineraryviewagain',views.itineraryviewagain,name='itineraryviewagain'),
+  path('spotdetailsview/<str:spotname_copy>/',views.spotdetailsview,name='spotdetailsview'),
   #path('budgetview',views.budgetview,name='budgetview'),#budgetview=is path given in url,name=budgetviewpackages=is name used to refer it in other places
   #path('destinationview',views.destinationview,name='destinationview'),
 ]+static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

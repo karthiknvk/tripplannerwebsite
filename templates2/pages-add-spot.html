@@ -75,14 +75,15 @@
                 <span class="align-middle">About</span>
               </a>
             </li>
-
-            <li class="sidebar-item">
-              <a class="sidebar-link" href="addreview">
-                <i class="align-middle" data-feather="edit-2"></i>
-                <span class="align-middle">Review</span>
-              </a>
-            </li>
-
+            <!--
+               <li class="sidebar-item">
+                <a class="sidebar-link" href="addreview">
+                  <i class="align-middle" data-feather="edit-2"></i>
+                  <span class="align-middle">Review</span>
+                </a>
+              </li>
+            -->
+           
             <li class="sidebar-item active">
               <a class="sidebar-link" href="addspot">
                 <i class="align-middle" data-feather="upload"></i>
@@ -150,88 +151,123 @@
             </div> -->
             <div class="card-body">
               <p>
-                User can contribute to th website by adding new tourist spots to
+                User can contribute to the website by adding new tourist spots to
                 the user-diven database.
               </p>
             </div>
 
             <div class="card-body">
-              <h5 class="card-title mb-0">Enter Details</h5>
-              <br />
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Tourist Spot Name"
-              />
-              <br />
-
-              <textarea
-                class="form-control"
-                rows="2"
-                placeholder="Tell me about this place"
-              ></textarea>
-
-              <br />
-
-              <h5 class="card-title mb-0">
-                Restaurant and Accommodation Available or Not
-              </h5>
-              <br />
-
-              <label class="form-check form-check-inline">
+              {% if messages %}
+              {% for message in messages%}
+              <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+                <h5>{{message}} 
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </h5>
+              </div>
+              {% endfor %}
+              {% endif %}
+              <form action="/usercontribution/addspot" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h5 class="card-title mb-0">Enter Details</h5>
+                <br />
                 <input
-                  class="form-check-input"
-                  type="radio"
-                  name="inline-radios-example"
-                  value="option1"
+                  type="text"
+                  class="form-control"
+                  placeholder="Tourist Spot Name"
+                  name="newspotname"
+                  required=""
                 />
-                <span class="form-check-label"> Available </span>
-              </label>
-              <label class="form-check form-check-inline">
+                <br />
                 <input
-                  class="form-check-input"
-                  type="radio"
-                  name="inline-radios-example"
-                  value="option2"
+                  type="text"
+                  class="form-control"
+                  placeholder="Tourist Spot District"
+                  name="newspotdistrict"
+                  required=""
                 />
-                <span class="form-check-label"> Not </span>
-              </label>
+                <br />
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Tourist Spot Location"
+                  name="newspotlocation"
+                  required=""
+                />
+                <br />
+                <textarea
+                  class="form-control"
+                  rows="2"
+                  placeholder="Tell me about this place"
+                  name="newspotcontent"
+                  required=""
+                ></textarea>
 
-              <br />
+                <br />
+                <!--
 
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Restaurant and Accommodation Name"
-              />
+                  <h5 class="card-title mb-0">
+                  Restaurant and Accommodation Available or Not
+                </h5>
+                <br />
 
-              <br />
+                <label class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inline-radios-example"
+                    value="option1"
+                  />
+                  <span class="form-check-label"> Available </span>
+                </label>
+                <label class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    name="inline-radios-example"
+                    value="option2"
+                  />
+                  <span class="form-check-label"> Not </span>
+                </label>
+                <br />
 
-              <h5 class="card-title mb-0">Upload spot photos</h5>
-              <br />
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Restaurant and Accommodation Name"
+                />
 
-              <input
-                type="file"
-                class="form-control"
-                placeholder="Tourist Spot Name"
-              />
-              <br />
+                <br />
+                -->
+                <h5 class="card-title mb-0">Upload spot photos</h5>
+                <br />
 
-              <input
-                type="file"
-                class="form-control"
-                placeholder="Tourist Spot Name"
-              />
-              <br />
+                <input
+                  type="file"
+                  class="form-control"
+                  placeholder="Image1"
+                  name="newspotimage1"
+                />
+                <br />
 
-              <input
-                type="file"
-                class="form-control"
-                placeholder="Tourist Spot Name"
-              />
-              <br />
+                <input
+                  type="file"
+                  class="form-control"
+                  placeholder="Image2"
+                  name="newspotimage2"
+                />
+                <br />
 
-              <button class="btn btn-secondary">Submit</button>
+                <input
+                  type="file"
+                  class="form-control"
+                  placeholder="Image3"
+                  name="newspotimage3"
+                />
+                <br />
+
+                <button class="btn btn-secondary">Submit</button>
+                </form>
+              
             </div>
           </div>
         </main>

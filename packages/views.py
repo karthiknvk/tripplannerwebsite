@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.contrib.auth.decorators import login_required
 from users.models import CustomUser
+from usercontribution.models import Review
 from .models import Destination,Onedaypackage,Twodaypackage,Threedaypackage,Fourdaypackage,Fivedaypackage,Sixdaypackage,Sevendaypackage,Tourpackage
 #import json
 #from .utils import serialize_destination
@@ -43,6 +44,8 @@ mainpackagedict=dict()
 temppackagedict=dict()
 mainpackagedictcopy=dict()
 temppackagedictcopy=dict()
+choosen_package_dict=dict()
+#spotdetailsdict=dict()
 @login_required
 def packageview(request):
   global user_profile
@@ -50,28 +53,31 @@ def packageview(request):
   global day
   global destination
   if 'itinerary' in request.POST:
-      print("package_details_list 1st time->", mainpackagedict)
+      #print("package_details_list 1st time->", mainpackagedict)
+      print("entering inside ITINERARYFORM in packageview if ")
       return itineraryview(request, mainpackagedict)
   elif 'filterform' in request.POST:
       #mainpackagedictcopy=dict()
-      print("entering inside landascapefilter")
+      print("entering inside FILTERFORM in packageview elif1")
       return landscapefilter(request,mainpackagedictcopy,temppackagedictcopy,day)
   elif 'choiceform' in request.POST:
+    print("entering inside CHOICEFORM in packageview elif2")
     day=request.POST.get('day')
-    print('day->',day)
+    #print('day->',day)
     destination = request.POST.get('destination', '')
     mainpackagedict.clear()
     temppackagedict.clear()
-    mainpackagelist=Tourpackage.objects.filter(district=destination,packagecategory=day).select_related('spotname').all()
-    print("\n")
-    print('mainpackagelist----->',mainpackagelist)
+    mainpackagelist=Tourpackage.objects.filter(district=destination,packagecategory=day).select_related('spotname').all() #to select all items fro tourpackage table where Tourpackage.spotname=Destination.spotname
+    #print("\n")
+    #print('mainpackagelist----->',mainpackagelist)
     mainspotnamelist=[]
     for package in mainpackagelist:
       number=str(package.packagenumber)
       count=package.district+number
-      print(count,"\n")
+      #print(count,"\n")
       key=count
-      packagelist=[package.id,                      #0
+      packagelist=[
+                      package.id,                       #0
                       package.district,                 #1
                       package.packagenumber,            #2
                       package.daynumber,                #3
@@ -83,7 +89,7 @@ def packageview(request):
                       package.spotname.description,     #9
                       package.spotname.img              #10
                       ]
-      print("packagelist->",packagelist,"\n")
+      #print("packagelist->",packagelist,"\n")
       if key not in mainpackagedict:
         mainpackagedict[key]=[]
       mainpackagedict[key].append(packagelist)
@@ -92,7 +98,8 @@ def packageview(request):
          temppackagedict[key].append(packagelist)
       else:
          continue
-
+         
+    '''
     print("*********mainpackagedict******")  
     for key in mainpackagedict:
       print(key,'->',mainpackagedict[key])
@@ -102,88 +109,123 @@ def packageview(request):
     for key in mainpackagedict:
       print(key,'->',temppackagedict[key])
       print("\n")
-    print("*********temppackagedict******")    
-    return render(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'district':destination,'temppackagedict':temppackagedict,'user_profile':user_profile},)
+    print("*********temppackagedict******")  
+
+    '''
+    print("rendering tourpackages-html in packageview ELIF")
+    print("destination:",destination)
+      
+    return render(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination,},)
   
   else:
-    return render(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'district':destination,'temppackagedict':temppackagedict,'user_profile':user_profile},)
+    '''
+    print("\nin package view again")
+    print("\nmainpackagedict:",mainpackagedict)
+    print("\nmainpackagedictcopy:",mainpackagedictcopy)
+    print("\ntemppackagedict",temppackagedict)
+    print("\ntemppackagedictcopy",temppackagedictcopy)
+    print("\nchoosen_package_dict",choosen_package_dict)
 
-    
-def itineraryview(request):
+    '''
+    print("entering inside packageview ELSE")
+    print("rendering tourpackages-html in packageview ELSE")
+    print("destination:",destination)
+    return render(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination})
+
+@login_required
+def itineraryviewagain(request):
+    print("entering inside itineraryviewagain ")
+    print("rendering tourpackages-html in itineraryviewagain")
+    print("destination:",destination)
     user_profile=request.user 
-    print("choosen package dict at end->",choosen_package_dict)
-    return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile})
+    #print("choosen package dict at itineraryviewagain->",choosen_package_dict)
+    return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile,'district':destination})
+  
 
+@login_required
 def itineraryview(request, mainpackagedict,):
     if request.method == "POST":
+        print("entering inside itineraryview IF ")
         package_code = request.POST.get('package_code')
-        print("package_code->", package_code)
+        #print("package_code->", package_code)
         global choosen_package_list
-        print("package_details_list2nd time->", mainpackagedict[package_code])
+        #print("package_details_list2nd time->", mainpackagedict[package_code])
         choosen_package_list=mainpackagedict[package_code]
-        print("choosen package list->",choosen_package_list)
-        print("choosen package list length->",len(choosen_package_list))
+        #print("choosen package list->",choosen_package_list)
+        #print("choosen package list length->",len(choosen_package_list))
         no_of_days=len(choosen_package_list)//3
-        choosen_package_dict=dict()
+        choosen_package_dict.clear()
         inner_dict=dict()
-        print("choosen package list length divided by 3->",no_of_days)
+        #print("choosen package list length divided by 3->",no_of_days)
         
         for inner_list in choosen_package_list:
-          print("choosen package dict now at top->",choosen_package_dict)
-          print("innerlist->",inner_list)
+          #print("choosen package dict now at top->",choosen_package_dict)
+          #print("innerlist->",inner_list)
           time_key=inner_list[4]
-          print("time_key->",time_key)
+          #print("time_key->",time_key)
           inner_dict[time_key]=inner_list
-          print("innerdictlength->",len(inner_dict))
+          #print("innerdictlength->",len(inner_dict))
           if len(inner_dict)<3:
-            print("inner_dict now->",inner_dict)
+            pass
+            #print("inner_dict now->")
+           # print("inner_dict now->",inner_dict)
             #continue
           else :
-            print("inner_dict now in else situation->",inner_dict)
+            #print("inner_dict now in else situation->",inner_dict)
             for i in range(1,no_of_days+1):
-              print(i)
+              #print(i)
               day_key='DAY'+str(i)
-              print("day_key->",day_key) 
+              #print("day_key->",day_key) 
               if day_key not in choosen_package_dict:
-                print("key not found")
-                print("ENTERED INSIDE")
+                #print("key not found")
+                #print("ENTERED INSIDE")
                 choosen_package_dict[day_key]=dict(inner_dict)
-                print("choosen package dict first->",choosen_package_dict)
+                #print("choosen package dict first->",choosen_package_dict)
                 inner_dict.clear()
                 break
               else:
-                print("key found,conitnuing to next")
+                #print("key found,conitnuing to next")
                 continue
               #problm 
 
-    print("choosen package dict at end->",choosen_package_dict)
+    #print("choosen package dict at end->",choosen_package_dict)
+    print("rendering tourpackages-html in itineraryview IF")
+    print("destination:",destination)
+    return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile,'district':destination})
 
-    return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile})
-                 
+@login_required                 
 def landscapeview(request):
    #global landscapelist
+   print("entering inside landscapeview ")
+   print("rendering tourpackages-html in landscapeview")
+   print("destination:",destination)
    user_profile=request.user
-   return render(request,'landscape-packages.html',{'mainpackagedictcopy':mainpackagedictcopy,'day':day,'district':destination,'landscapelist':landscapelist,'temppackagedictcopy':temppackagedictcopy,'mainpackagedict':mainpackagedict,'temppackagedict':temppackagedict,'user_profile':user_profile},)
+   return render(request,'landscape-packages.html',{'mainpackagedictcopy':mainpackagedictcopy,'day':day,'landscapelist':landscapelist,'temppackagedictcopy':temppackagedictcopy,'mainpackagedict':mainpackagedict,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination})
 
+@login_required
 def landscapefilter(request,mainpackagedictcopy,temppackagedictcopy,day):
     if request.method == "POST":
-      print("entering inside landscapefilter post")
+      print("entering inside landscapefilter IF")
       global landscapelist
       landscapelist=request.POST.getlist('filter')
-      print(landscapelist)
+      #print(landscapelist)
       if not landscapelist:
          return redirect("packageview")
       #(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'district':destination,'temppackagedict':temppackagedict},)
       else:
         mainpackagedictcopy.clear()
         temppackagedictcopy.clear()
-        print("landscapelist->",landscapelist)
-        print("\nDay->",day)
-        print('\nmainpackagedict->',mainpackagedict)
-        print('\nmainpackagedictcopy->',mainpackagedictcopy)
+        #print("landscapelist->",landscapelist)
+        #print("\nDay->",day)
+        #print('\nmainpackagedict->',mainpackagedict)
+        #print('\nmainpackagedictcopy->',mainpackagedictcopy)
+        '''
         for key,dictitems in mainpackagedict.items():
           print("item in each key")
           print(key,'->',dictitems)
+          
+        '''
+        
         for item in landscapelist:
           for key,dictitems in mainpackagedict.items():
               if key not in mainpackagedictcopy:
@@ -191,10 +233,10 @@ def landscapefilter(request,mainpackagedictcopy,temppackagedictcopy,day):
                       if item in innerdictitems:
                           mainpackagedictcopy[key]=dictitems
                           for key,innerdictitems in mainpackagedictcopy.items():
-                             print("\nkey in maindictcopy",key)
-                             print("\ninnerdictitems in maindictcopy",innerdictitems)
+                             #print("\nkey in maindictcopy",key)
+                             #print("\ninnerdictitems in maindictcopy",innerdictitems)
                              for insideitems in innerdictitems:
-                              print("\ninsideitems:",insideitems)
+                              #print("\ninsideitems:",insideitems)
                               if key not in temppackagedictcopy:
                                 temppackagedictcopy[key]=[]
                                 temppackagedictcopy[key].append(insideitems)
@@ -204,15 +246,78 @@ def landscapefilter(request,mainpackagedictcopy,temppackagedictcopy,day):
                              #print("\ninnerdictitems without list:",innerdictitems)
                              #innerdictitemslist=list(innerdictitems)
                              #
-                        
+        '''
         print('\nmainpackagedict->',mainpackagedict)
         print('\ntemppackagedict->',temppackagedict)
         print('\nmainpackagedictcopy->',mainpackagedictcopy)
         print('\ntemppackagedictcopy->',temppackagedictcopy)
-        return render(request,'landscape-packages.html',{'mainpackagedictcopy':mainpackagedictcopy,'day':day,'district':destination,'landscapelist':landscapelist,'temppackagedictcopy':temppackagedictcopy,'mainpackagedict':mainpackagedict,'temppackagedict':temppackagedict,'user_profile':user_profile})
-      
+         
+        '''               
+        print("rendering tourpackages-html in landscapefilter IF")
+        print("destination:",destination)
+        return render(request,'landscape-packages.html',{'mainpackagedictcopy':mainpackagedictcopy,'day':day,'landscapelist':landscapelist,'temppackagedictcopy':temppackagedictcopy,'mainpackagedict':mainpackagedict,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination})
 
-    
+@login_required      
+def spotdetailsview(request,spotname_copy,):
+   print("entering inside spotdeatilsview")
+   #print("spotdetailsview function spotname_copy",spotname_copy)
+   global spotdetails_spotname
+   spotdetails_spotname=spotname_copy
+   user_profile=request.user
+   #print("spot:",spotdetails_spotname)
+   spotdetailslist=Destination.objects.get(spotname=spotdetails_spotname)
+   spotdetailsdict=dict()
+   spotdetailsdict={
+      'spotname':spotdetailslist.spotname,
+      'spotdistrict':spotdetailslist.spotdistrict,
+      'location':spotdetailslist.location,
+      'landscape':spotdetailslist.landscape,
+      'cafespot':spotdetailslist.cafespot,
+      'description':spotdetailslist.description,
+      'img':spotdetailslist.img,
+   }
+   #print("selectedspot details of spotdetailsdict:",spotdetailsdict)
+   
+   spotdetails_spotdistrict=spotdetailsdict['spotdistrict']
+   #print("selectedspot district:",spotdetails_spotdistrict)
+   spotreviewdetailsdict=dict()
+   spotdetails_spotname_instance = Destination.objects.get(spotname=spotdetails_spotname)
+   spotreviewdetailslist=Review.objects.filter(spotname=spotdetails_spotname_instance,spotdistrict=spotdetails_spotdistrict).all()
+   #mainpackagelist=Tourpackage.objects.filter(district=destination,packagecategory=day).select_related('spotname').all()
+   #print("spotreviewdetailslist:",spotreviewdetailslist)
+   number=0
+   for review in spotreviewdetailslist:
+      number=number+1
+      reviewkey="Review"+str(number)
+      reviewlist=[
+                      review.id,            #0
+                      review.user,          #1
+                      review.spotname,      #2           
+                      review.spotdistrict,  #3    
+                      review.content,       #4
+                      review.review_image1, #5    
+                      review.review_image2, #6      
+                      ]
+      #print("reviewlist",reviewlist)
+      spotreviewdetailsdict[reviewkey]=reviewlist
+   #print("spotreviewdetailsdict",spotreviewdetailsdict) 
+   #spotdetailsdict{}
+   #selectedspot=request.GET.get('value')
+   '''''
+   print("selectedspot details:",spotdetailslist)
+   print("selectedspot details of spotdetailsdict:",spotdetailsdict)
+   print("\nmainpackagedict:",mainpackagedict)
+   print("\nmainpackagedictcopy:",mainpackagedictcopy)
+   print("\ntemppackagedict",temppackagedict)
+   print("\ntemppackagedictcopy",temppackagedictcopy)
+   print("\nchoosen_package_dict",choosen_package_dict)
+   '''
+   print("rendering tourpackages-html in spotdeatilsview")
+   print("destination:",destination)
+   print("selectedspot reviews :",spotreviewdetailsdict)
+   return render(request,"spotdetails.html",{'spotdetails_spotname':spotdetails_spotname,'user_profile':user_profile,'spotdetailsdict':spotdetailsdict,'spotreviewdetailsdict':spotreviewdetailsdict,'district':destination})
+
+
     
 
 '''

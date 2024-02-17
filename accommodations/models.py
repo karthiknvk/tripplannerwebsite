@@ -9,7 +9,8 @@ class Accommodationdetailstable(models.Model):
     lowest_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=None)
     highest_rate = models.DecimalField(max_digits=10, decimal_places=2, null=True, default=None)
     restaurant = models.BooleanField(blank=True, null=True, default=False)
-    accommodation_image = models.ImageField(upload_to='accommodation_images/', blank=True, null=True, default=None)
+    accommodation_image1 = models.ImageField(upload_to='accommodation_images/', blank=True, null=True, default=None)
+    accommodation_image2 = models.ImageField(upload_to='accommodation_images/', blank=True, null=True, default=None)
 
     def __str__(self):
         return self.name

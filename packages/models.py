@@ -243,6 +243,5 @@ class Tourpackage(models.Model):
         return objectname
   
   class Meta:
-        #db_table = "7daypackage" for db name
         db_table_comment = "packages for 7day tour selection"  #for comments
         ordering = ['id']
