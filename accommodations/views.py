@@ -81,10 +81,10 @@ def accommodationformview(request):
     print("entered into ELIF statement")
     accommodation=Accommodationdetailstable.objects.get(user=user_profile)
     print("accommodation in ELIF",accommodation)
-    return render(request,"pages-accommodation.html",{'accommodation':accommodation,'user_profile':user_profile})
+    return render(request,"acco-form.html",{'accommodation':accommodation,'user_profile':user_profile})
   else:
     print("entered into ELSE statement")
-    return render(request,"pages-accommodation.html",{'user_profile':user_profile})
+    return render(request,"acco-form.html",{'user_profile':user_profile})
   
 @login_required 
 def accommodationaccountview(request):

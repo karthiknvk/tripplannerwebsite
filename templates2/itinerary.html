@@ -3,8 +3,11 @@
 <main class="content">
   {% for day_key,day_key_items in choosen_package_dict.items %}
   <div class="card">
+    <div class="card-header">
+      <h1 style="text-align: center">{{day_key}}</h1>
+    </div>
     <div class="card-body">
-      <h2 class="card-title mb-0" style="text-align: center">{{day_key}}</h2>
+      <!-- <h2 class="card-title mb-0" style="text-align: center">{{day_key}}</h2> -->
       <div class="card-body">
         <div class="row">
           {% for time_key,time_key_items in day_key_items.items %}
@@ -50,19 +53,17 @@
                 {{time_key_items.7}}
               </p>
               <p>
+                {% if time_key_items.8 %}
                 <span style="color: blueviolet">Cafe spot:</span>
                 {{time_key_items.8}}
+                {% else %}
+                <span style="color: blueviolet">Cafe spot:</span>
+                Not available
+                {% endif %}
               </p>
               <p>
                 <span style="color: blueviolet">Description:</span>
-                About 16 km away from Kannur, Parassinikkadavu is a town
-                popular for its Muthappan Temple and Parassinikkadavu
-                Snake Park. The Muthappan temple, dedicated to Sree
-                Muthappan is the only Hindu temple in the state which
-                witnesses a Theyyam performance daily as per ritual. The
-                snake park on the other hand, is home to a huge number and
-                variety of snakes including the King Cobra, Pit Viper and
-                many more.
+                {{time_key_items.9}}
               </p>
             </div>
           </div>
@@ -72,47 +73,10 @@
   </div>
   {% endfor %}
   
-
-  <div class="card-header">
-    <h5 class="card-title mb-0">
-      Restaurant & accommodations Details
-    </h5>
-  </div>
-  <div class="row">
-    <div class="col-12 col-md-4 col-sm-6">
-      <div class="card">
-        <img
-          class="card-img-top"
-          src="data:image/png;base64,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"
-          alt="Unsplash"
-        />
-        <div class="card-header">
-          <h5 class="card-title mb-0" style="text-align: center">
-            Restaurant Name <br />
-            Location
-          </h5>
-        </div>
-      </div>
-    </div>
-    <div class="col-12 col-md-8 col-sm-6">
-      <h5 class="card-title mb-0" style="text-align: center">
-        Restaurant Name
-      </h5>
-      <br />
-
-      <h5 style="text-align: center">
-        <span style="color: blueviolet">
-          Located a minute away from Muzhappilangad Beach, the
-          property offers stunning views of the Arabian Sea amidst
-          the foliage of coconut trees. Guests can enjoy the
-          serenity of the location from the comfort of their
-          rooms, each equipped with its own balcony. Those looking
-          for an authentic local experience can indulge in diving
-          and fishing around the property.</span
-        >
-      </h5>
-    </div>
-  </div>
+  <!--
+    
+  -->
+  
 </main>
 
 {% endblock %}

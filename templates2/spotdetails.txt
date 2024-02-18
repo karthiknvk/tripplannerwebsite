@@ -147,7 +147,11 @@
               <h4>DISTRICT:{{spotdetailsdict.spotdistrict}}</h4>
               <h4>LOCATION:{{spotdetailsdict.location}}</h4>
               <h4>LANDSCAPE:{{spotdetailsdict.landscape}}</h4>
+              {% if spotdetailsdict.cafespot %}
               <h4>CAFESPOT:{{spotdetailsdict.cafespot}}</h4>
+              {% else %}
+              <h4>CAFESPOT:Not available</h4>
+              {% endif %}
               <h4>DESCRIPTION:{{spotdetailsdict.description}}</h4>
               <h3></h3>
             </div>

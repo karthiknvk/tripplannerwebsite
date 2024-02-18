@@ -6,7 +6,7 @@ class Destination(models.Model):
   spotdistrict=models.CharField(max_length=100)
   location=models.CharField(max_length=100)
   landscape=models.CharField(max_length=100)
-  cafespot=models.CharField(max_length=100)
+  cafespot=models.CharField(max_length=100,blank=True, null=True, default=None)
   description=models.CharField(max_length=250)
   img=models.ImageField(upload_to='destination')
 

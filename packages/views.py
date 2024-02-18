@@ -315,7 +315,7 @@ def spotdetailsview(request,spotname_copy,):
    print("rendering tourpackages-html in spotdeatilsview")
    print("destination:",destination)
    print("selectedspot reviews :",spotreviewdetailsdict)
-   return render(request,"spotdetails.html",{'spotdetails_spotname':spotdetails_spotname,'user_profile':user_profile,'spotdetailsdict':spotdetailsdict,'spotreviewdetailsdict':spotreviewdetailsdict,'district':destination})
+   return render(request,"itinerary-spot-details.html",{'spotdetails_spotname':spotdetails_spotname,'user_profile':user_profile,'spotdetailsdict':spotdetailsdict,'spotreviewdetailsdict':spotreviewdetailsdict,'district':destination})
 
 
     
