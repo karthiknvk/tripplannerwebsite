@@ -22,6 +22,7 @@ from . import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('users.urls')),
+    path('users/',include('users.urls')),
     path('packages/',include('packages.urls')),
     path('usercontribution/',include('usercontribution.urls')),
     path('accommodations/',include('accommodations.urls')),

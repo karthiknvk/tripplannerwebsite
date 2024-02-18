@@ -24,13 +24,12 @@
 
     <link
       rel="canonical"
-      href="https://demo-basic.adminkit.io/pages-blank.html"
+      href="https://demo-basic.adminkit.io/pages-profile.html"
     />
 
-    <title>Accommodation Form</title>
+    <title>Profile</title>
 
     <link href="{% static 'css/app.css' %}" rel="stylesheet" />
-    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap"
       rel="stylesheet"
@@ -41,41 +40,62 @@
     <div class="wrapper">
       <nav id="sidebar" class="sidebar js-sidebar">
         <div class="sidebar-content js-simplebar">
-          <a class="sidebar-brand" href="/accommodations">
+          <a class="sidebar-brand" href="/packages">
             <span class="align-middle">TRIP PLANNER</span>
           </a>
 
           <ul class="sidebar-nav">
-            <!-- <li class="sidebar-header">Pages</li> -->
-
             <!-- <li class="sidebar-item">
               <a class="sidebar-link" href="index.html">
                 <i class="align-middle" data-feather="sliders"></i>
                 <span class="align-middle">Dashboard</span>
               </a>
             </li> -->
-            {% if accommodation %}
+
             <li class="sidebar-item">
-              <a class="sidebar-link" href="/accommodations">
+              <a class="sidebar-link" href="/packages">
                 <i class="align-middle" data-feather="home"></i>
-                <span class="align-middle">Profile</span>
-              </a>
-            </li>
-            <li class="sidebar-item active">
-              <a class="sidebar-link" href="accommodationformview">
-                <i class="align-middle" data-feather="user"></i>
-                <span class="align-middle">Edit</span>
-              </a>
-            </li>
-            {% else %}
-            <li class="sidebar-item active">
-              <a class="sidebar-link" href="/accommodations">
-                <i class="align-middle" data-feather="user"></i>
                 <span class="align-middle">Home</span>
               </a>
             </li>
-            {% endif %}
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/packages/accountview">
+                <i class="align-middle" data-feather="user"></i>
+                <span class="align-middle">Profile</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item active">
+              <a class="sidebar-link" href="/users/profileupdationview">
+                <i class="align-middle" data-feather="user"></i>
+                <span class="align-middle">Update Profile</span>
+              </a>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/packages/aboutview">
+                <i class="align-middle" data-feather="info"></i>
+                <span class="align-middle">About</span>
+              </a>
+            </li>
+
+            <!--
+              <li class="sidebar-item">
+                <a class="sidebar-link" href="/usercontribution/addreview">
+                  <i class="align-middle" data-feather="edit-2"></i>
+                  <span class="align-middle">Review</span>
+                </a>
+              </li>
+            -->
             
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/usercontribution/addspot">
+                <i class="align-middle" data-feather="upload"></i>
+                <span class="align-middle">Add Spot</span>
+              </a>
+            </li>
 
             <li class="sidebar-item">
               <a class="sidebar-link" href="/packages/logoutview">
@@ -110,18 +130,17 @@
                   data-bs-toggle="dropdown"
                 >
                   <img
-                    src="https://www.freeiconspng.com/thumbs/restaurant-icon-png/restaurant-icon-png-plate-1.png"
+                    src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
                     class="avatar img-fluid rounded me-1"
-                    alt="Restaurant Name"
+                    alt="Charles Hall"
                   />
                   <span class="text-dark">{{user_profile.username}}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
-                  {% if accommodation %}
-                  <a class="dropdown-item" href="/accommodations"
+                  <a class="dropdown-item" href="/packages/accountview"
                     ><i class="align-middle me-1" data-feather="user"></i>
-                    Profile</a>
-                  {% endif %}
+                    Profile</a
+                  >
 
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="/packages/logoutview">Log out</a>
@@ -136,7 +155,7 @@
             <div class="card-body">
               
 
-              <form action="accommodationformview" method="POST" enctype="multipart/form-data">
+              <form action="profileupdationview" method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
                 <h5 class="card-title mb-0">Enter Details</h5>
                 <br />
@@ -144,80 +163,50 @@
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Name"
-                  name="accommodation_name"
-                  required=""
+                  placeholder="Username"
+                  name="username"
+                  
+                />
+                <br />
+
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email"
+                  name="email"
+                  
                 />
                 <br />
 
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="District"
-                  name="accommodation_district"
-                  required=""
+                  placeholder="Firstname"
+                  name="firstname"
+                  
                 />
                 <br />
 
                 <input
                   type="text"
                   class="form-control"
-                  placeholder="Location"
-                  name="accommodation_location"
-                  required=""
-                />
-                <br />
-
-                <input
-                  type="number"
-                  step="0.01" 
-                  min="0"
                   class="form-control"
-                  placeholder="Lowest Price"
-                  name="accommodation_lowest_price"
-                  required=""
-                />
-                <br />
-
-                <input
-                  type="number"
-                  step="0.01" 
-                  min="0"
-                  class="form-control"
-                  placeholder="Highest Price"
-                  name="accommodation_highest_price"
-                  required
-                />
-                <br />
-
-                <p>Restaurant available :
-                  <input
-                    type="checkbox"
-                    name="accommodation_restaurant"
-                  ></p>
-
-                <br />
-                <h5 class="card-title mb-0">Upload photos</h5>
-                <br />
-                
-                <input
-                  type="file"
-                  class="form-control"
-                  placeholder="Image1"
-                  name="accommodation_image1"
-                  required=""
+                  placeholder="Lastname"
+                  name="lastname"
+                  
                 />
                 <br />
 
                 <input
                   type="file"
                   class="form-control"
-                  placeholder="Tourist Spot Name"
-                  name="accommodation_image2"
+                  placeholder="Image1"
+                  name="userimage"
+                  
                 />
                 <br />
 
-                <button class="btn btn-secondary">Submit</button>
+                <button class="btn btn-secondary" name="updateprofile">Submit</button>
               </form>
             </div>
           </div>

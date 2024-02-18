@@ -60,11 +60,11 @@ def loginview(request):
       auth.login(request,user)
       if request.user.is_authenticated and request.user.is_accommodation:
         print("accommodation user logged in")
-        return redirect('accommodations/')
+        return redirect('/accommodations')
       else:
         print("regular user logged in")
         messages.success(request,"")
-        return redirect('packages/')
+        return redirect('/packages')
     else:
       print("invalid credentials")
       messages.error(request, 'Invalid credentials')
@@ -74,5 +74,43 @@ def loginview(request):
     django_messages = messages.get_messages(request)
     return render(request,"login.html",{'django_messages': django_messages})
 
+
+
+def profileupdationview(request):
+  user_profile=request.user
+  if request.method=="POST" and 'updateprofile' in request.POST: 
+    username = request.POST.get('username')
+    email = request.POST.get('email')
+    first_name = request.POST.get('firstname')
+    last_name = request.POST.get('lastname')
+    user_image = request.FILES.get('userimage')
+
+    if username:
+      if CustomUser.objects.exclude(id=user_profile.id).filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+      else:
+                user_profile.username = username
+
+    if email:
+        if CustomUser.objects.exclude(id=user_profile.id).filter(email=email).exists():
+          messages.error(request, "Email already exists.")
+        else:
+          user_profile.email = email
+
+    if first_name:
+      user_profile.first_name = first_name
+
+    if last_name:
+      user_profile.last_name = last_name
+
+    if user_image:
+      user_profile.user_image = user_image
+
+    user_profile.save()
+    print("profile updated succcesfully")
+    user_profile=request.user
+    return render(request,'pages-profile.html',{'user_profile':user_profile})
+  else:
+    return render(request,"pages-profile-update.html",{'user_profile':user_profile})
 
 
