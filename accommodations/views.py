@@ -107,6 +107,7 @@ def listofaccommodationsview(request,district):
   accommodationdetailsdict=dict()
   accommodationdetailslist=Accommodationdetailstable.objects.filter(district=accommodation_district).all()
   number=0
+  print("accommodationdetailslist ***************",accommodationdetailslist)
   for accommodationcenter in accommodationdetailslist:
     number=number+1
     accommodationkey="Accommodation"+str(number)

@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'tripplannerwebsite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tripplannerwebsite',
+        'NAME': 'TRIPPLANNERWEBSITE',
         'USER':'postgres',
         'HOST':'localhost',
         'PASSWORD':'password',
@@ -142,4 +142,5 @@ MESSAGE_TAGS={
     messages.ERROR:'danger',
     messages.SUCCESS:'success',}
 
+GOOGLE_MAP_API=os.environ.get("GOOGLE_MAP_API_KEY")
 AUTH_USER_MODEL = 'users.CustomUser'

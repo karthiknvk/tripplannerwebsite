@@ -3,6 +3,9 @@ from django.contrib.auth.models import User,auth
 from django.contrib.auth.decorators import login_required
 from users.models import CustomUser
 from usercontribution.models import Review
+from geopy.geocoders import ArcGIS,Nominatim
+from geopy import distance
+from django.conf import settings
 from .models import Destination,Onedaypackage,Twodaypackage,Threedaypackage,Fourdaypackage,Fivedaypackage,Sixdaypackage,Sevendaypackage,Tourpackage
 #import json
 #from .utils import serialize_destination
@@ -151,7 +154,9 @@ def itineraryview(request, mainpackagedict,):
         global choosen_package_list
         #print("package_details_list2nd time->", mainpackagedict[package_code])
         choosen_package_list=mainpackagedict[package_code]
-        #print("choosen package list->",choosen_package_list)
+        print("***********************************************")
+        print("choosen package list->",choosen_package_list)
+        print("***********************************************")
         #print("choosen package list length->",len(choosen_package_list))
         no_of_days=len(choosen_package_list)//3
         choosen_package_dict.clear()
@@ -191,6 +196,7 @@ def itineraryview(request, mainpackagedict,):
     #print("choosen package dict at end->",choosen_package_dict)
     print("rendering tourpackages-html in itineraryview IF")
     print("destination:",destination)
+    print("choosenpackagedict in itinerary view:",choosen_package_dict)
     return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile,'district':destination})
 
 @login_required                 
@@ -317,9 +323,74 @@ def spotdetailsview(request,spotname_copy,):
    print("selectedspot reviews :",spotreviewdetailsdict)
    return render(request,"itinerary-spot-details.html",{'spotdetails_spotname':spotdetails_spotname,'user_profile':user_profile,'spotdetailsdict':spotdetailsdict,'spotreviewdetailsdict':spotreviewdetailsdict,'district':destination})
 
+def mapview(request,day_key_value):
+  print("choosen package dict in map view",choosen_package_dict)
+  map_package_dict=choosen_package_dict[day_key_value]
+  print("choosen package dict in map view",map_package_dict)
+  '''
+  gcode=ArcGIS()
+  place_name="Kozhikode Beach"
+  place_name_details=gcode.geocode('modinagar')
+  print("place_name_details:",place_name_details)
+  print("place__details:",gcode.geocode('modinagar'))
+  print("place__details_lat:",gcode.geocode(place_name).latitude)
+  print("********************************")
+  geocoder=Nominatim(user_agent="tpw")
+  loc1="Kozhikode Beach"
+  loc2="Mananchira Square"
+  loc3="mananchira square"
+  cordinate1=geocoder.geocode(loc1)
+  cordinate2=geocoder.geocode(loc2)
+  cordinate3=geocoder.geocode(loc3)
+  print("cord1 Koz:",cordinate1)
+  print("cord2 Man:",cordinate2)
+  print("cord3 man:",cordinate3)
+  print("cord1 lat and long KOZ:",cordinate1.latitude,cordinate1.longitude)
+  print("cord3 lat and long man:",cordinate3.latitude,cordinate3.longitude)
+  print("cord2 lat and long Man:",cordinate2.latitude,cordinate2.longitude)
+  lat1,long1=(cordinate1.latitude),(cordinate1.longitude)
+  lat2,long2=(cordinate2.latitude),(cordinate2.longitude)
+  place1=(lat1,long1)
+  place2=(lat2,long2)
+  print("distance:",distance.distance(place1,place2))
+   #gmap=googlemaps.Client(key=settings.GOOGLE_MAP_API)
+   #print("gmap value",gmap)
+   #place_name_details=gmap.geocode(place_name)
+   #print("place_name_details",place_name_details)
 
+  '''
+  '''
+  map_package_dict={
+      'spotname':map_package_list
+  }
+  '''
+  value=1
+  for key,items in map_package_dict.items():
+     print("value now:",value)
+     if value==1:
+        Morning=items
+     elif value==2:
+        Afternoon=items
+     elif value==3:
+        Evening=items
+     value=value+1
+  print("\n Morning time:",Morning)
+  print("\n Afternoon time:",Afternoon)   
+  print("\n Evening time:",Evening) 
+  #selected_map_package_dict={'Morning':Morning,'Afternoon':Afternoon,'Evening':Evening}
+  return render(request,"maps.html",{'day_key_value':day_key_value,'choosen_package_dict':choosen_package_dict,'map_package_list':map_package_dict,'Mornings':Morning,'Afternoons':Afternoon,'Evenings':Evening})
     
-
+def createpackageview(request):
+   print("day createpackageview",day)
+   print("destinaton createpackageview",destination)
+   selected_place_from_destinations=Destination.objects.filter(spotdistrict=destination).all()
+   print("selected_place_from_destinations",selected_place_from_destinations)
+   if request.method=="POST":
+      create_package_selected_list=request.POST.getlist('create_package_selected_list')
+      print("create_package_selected_list",create_package_selected_list)
+      return render(request,"create_package.html",{'day':day,'destination':destination,'create_package_selected_list':create_package_selected_list})
+   else:
+      return render(request,"create_package.html",{'day':day,'destination':destination,'selected_place_from_destinations':selected_place_from_destinations})
 '''
     if day == '1': #day is in string format
         mainpackagedict.clear()
