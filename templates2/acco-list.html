@@ -99,79 +99,6 @@
                   <span class="align-middle">Filtered Packages</span>
                 </a>
               </li>
-              <li class="sidebar-item">
-                <a
-                  class="sidebar-link"
-                  href="#"
-                  id="navbarDarkDropdownMenuLink"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="align-middle" data-feather="filter"></i>
-                  <span class="align-middle">Filter</span>
-                </a>
-                <form class="filter-form-div" id="filterForm" action="/packages/packageview" method="POST">
-                {% csrf_token %}
-                <ul class="dropdown-menu dropdown-menu-dark">
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Temple" />
-                      </i>
-                      <span class="align-middle">Temple</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Beach" />
-                      </i>
-                      <span class="align-middle">Beach</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Park" />
-                      </i>
-                      <span class="align-middle">Park</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Museum" />
-                      </i>
-                      <span class="align-middle">Museum</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Waterfalls" />
-                      </i>
-                      <span class="align-middle">Waterfalls</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Hill" />
-                      </i>
-                      <span class="align-middle" >Hill</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <button type="submit" name="filterform" class="btn btn-primary">
-                        Apply filters
-                      </button>
-                    </a>
-                  </li>
-                </ul>
-                </form>
-              </li>
 
             {% else %}
               <li class="sidebar-item">
@@ -179,79 +106,6 @@
                   <i class="align-middle" data-feather="package"></i>
                   <span class="align-middle">Packages</span>
                 </a>
-              </li>
-              <li class="sidebar-item">
-                <a
-                  class="sidebar-link"
-                  href="#"
-                  id="navbarDarkDropdownMenuLink"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i class="align-middle" data-feather="filter"></i>
-                  <span class="align-middle">Filter</span>
-                </a>
-                <form class="filter-form-div" id="filterForm" action="/packages/packageview" method="POST">
-                {% csrf_token %}
-                <ul class="dropdown-menu dropdown-menu-dark">
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Temple" />
-                      </i>
-                      <span class="align-middle">Temple</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Beach" />
-                      </i>
-                      <span class="align-middle">Beach</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Park" />
-                      </i>
-                      <span class="align-middle">Park</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Museum" />
-                      </i>
-                      <span class="align-middle">Museum</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Waterfalls" />
-                      </i>
-                      <span class="align-middle">Waterfalls</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <i class="align-middle">
-                        <input type="checkbox" name="filter" value="Hill" />
-                      </i>
-                      <span class="align-middle" >Hill</span>
-                    </a>
-                  </li>
-                  <li class="sidebar-item">
-                    <a class="sidebar-link">
-                      <button type="submit" name="filterform" class="btn btn-primary">
-                        Apply filters
-                      </button>
-                    </a>
-                  </li>
-                </ul>
-                </form>
               </li>
 
             {% endif %}
@@ -296,11 +150,19 @@
                   href="#"
                   data-bs-toggle="dropdown"
                 >
-                  <img
-                    src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
-                    class="avatar img-fluid rounded me-1"
-                    alt="Charles Hall"
-                  />
+                {% if user_profile.user_image %}
+                <img
+                  src="{{user_profile.user_image.url}}"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% else %}
+                <img
+                  src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% endif %}
                   <span class="text-dark">{{user_profile.username}}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -327,20 +189,17 @@
             {% for acommodationcenterkey,acommodationcenterdetails in accommodationdetailsdict.items %}
             <div class="row">
               <div class="col-md-4 col-xl-3">
-                
                 <div class="card mb-3">
-                  <div class="card-header">
-                    <!-- <h5 class="card-title mb-0">Profile Details</h5> -->
-                  </div>
                   <div class="card-body text-center">
                     <img
                       src="{{acommodationcenterdetails.5.url}}"
-                      alt="Christina Mason"
-                      class="img-fluid rounded-circle mb-2"
-                      width="128"
-                      height="128"
+                      alt="No image available"
+                      class="img rounded mb-2"
+                      width="160px"
+                      height="185px"
                     />
-                    <h5 class="card-title mb-0"></h5>
+                    <br>
+                    <h1 class="card-title mb-0">{{acommodationcenterdetails.0}}</h1>
                     
                   </div>
                   <hr class="my-0" />
@@ -357,7 +216,7 @@
                   -->
                   
                   <div class="card-body">
-                    <h5 class="card-title mb-0">Name : {{acommodationcenterdetails.0}}</h5>
+                    <h5 class="card-title mb-0">ACCOMMODATION INFO</h5>
                     
                     <br />
                     <h5 class="card-title mb-0">District : {{acommodationcenterdetails.1}}</h5>

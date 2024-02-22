@@ -129,11 +129,19 @@
                   href="#"
                   data-bs-toggle="dropdown"
                 >
-                  <img
-                    src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
-                    class="avatar img-fluid rounded me-1"
-                    alt="Charles Hall"
-                  />
+                {% if user_profile.user_image %}
+                <img
+                  src="{{user_profile.user_image.url}}"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% else %}
+                <img
+                  src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% endif %}
                   <span class="text-dark">{{user_profile.username}}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">

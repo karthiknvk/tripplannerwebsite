@@ -100,31 +100,7 @@ def accommodationaccountview(request):
       print("Accommodation details not found for this user.")
       return render(request, "homeaccommodation.html", {'accommodation': None})
   
-@login_required  
-def listofaccommodationsview(request,district):
-  accommodation_district = district
-  user_profile=request.user
-  accommodationdetailsdict=dict()
-  accommodationdetailslist=Accommodationdetailstable.objects.filter(district=accommodation_district).all()
-  number=0
-  print("accommodationdetailslist ***************",accommodationdetailslist)
-  for accommodationcenter in accommodationdetailslist:
-    number=number+1
-    accommodationkey="Accommodation"+str(number)
-    accommodationdetailstempdict=[
-        accommodationcenter.name,                 #0
-        accommodationcenter.district,             #1  
-        accommodationcenter.location,             #2
-        accommodationcenter.lowest_rate,          #3
-        accommodationcenter.highest_rate,         #4
-        accommodationcenter.accommodation_image1, #5
-        accommodationcenter.accommodation_image2, #6
-        accommodationcenter.restaurant,           #7
-    ]
-    accommodationdetailsdict[accommodationkey]=accommodationdetailstempdict
-  print("accommodationdetailsdict",accommodationdetailsdict)
-  #accommodationlist=Tourpackage.objects.filter(district=destination,packagecategory=day)
-  return render(request,"acco-list.html",{'accommodation_district':accommodation_district,'user_profile':user_profile,'accommodationdetailsdict':accommodationdetailsdict})
+
 
 '''
 name=request.POST["name"]

@@ -104,11 +104,19 @@
                   href="#"
                   data-bs-toggle="dropdown"
                 >
-                  <img
-                    src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
-                    class="avatar img-fluid rounded me-1"
-                    alt="User Name"
-                  />
+                {% if user_profile.user_image %}
+                <img
+                  src="{{user_profile.user_image.url}}"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% else %}
+                <img
+                  src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% endif %}
                   <span class="text-dark">{{user_profile.username}}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -135,34 +143,30 @@
           <div>Morning time:{{Mornings}}</div>
           <div id="map1" style="height: 600px; width:800px;">
           </div>
-          {{ morning_json|json_script:"Morning_json" }}
+
+
+          {{ lat_long_list|json_script:"lat_long_list_json" }}
+          {{ list10|json_script:"list_json" }}
+
           <script id="Afternoon_json" type="application/json">{{ Afternoon|safe }}</script>
+
+
           <script>
-            var map = L.map('map1').setView([51.505, -0.09], 713);
+            var map = L.map('map1').setView([11.2626, 75.7673], 13);
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
+
+            let lat_long_list=JSON.parse(document.getElementById('lat_long_list_json').textContent)
+            console.log(lat_long_list)
+            lat_long_list.forEach(
+              lat_long_marker =>{
+                L.marker([lat_long_marker.latitude,lat_long_marker.longitude]).addTo(map)
+              }
+            )
           </script>
           <br>
-          <div>Afternoon time:{{Afternoons}}</div>
-          <<div id="map2" style="height: 600px; width:800px;">
-          </div>
-          <script>
-            var map = L.map('map2').setView([51.505, -0.09], 713);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-          </script>
-          <br>
-          <div>Evening time:{{Evenings}}</div>
-          <div id="map3" style="height: 600px; width:800px;">
-          </div>
-          <script>
-            var map = L.map('map3').setView([51.505, -0.09], 713);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-          </script>
+          
           <br>
           
           <!--
@@ -172,15 +176,6 @@
           </div>
           -->
           
-          <div id="map" style="height: 600px; width:800px;">
-            map here
-          </div>
-          <script>
-            var map = L.map('map').setView([51.505, -0.09], 713);
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
-          </script>
         </main>
 
         <footer class="footer">

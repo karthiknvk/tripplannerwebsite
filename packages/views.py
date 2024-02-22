@@ -2,11 +2,12 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.contrib.auth.decorators import login_required
 from users.models import CustomUser
+from accommodations.models import Accommodationdetailstable
 from usercontribution.models import Review
 from geopy.geocoders import ArcGIS,Nominatim
 from geopy import distance
 from django.conf import settings
-from .models import Destination,Onedaypackage,Twodaypackage,Threedaypackage,Fourdaypackage,Fivedaypackage,Sixdaypackage,Sevendaypackage,Tourpackage
+from .models import Destination,Tourpackage
 #import json
 #from .utils import serialize_destination
 #from django.http import JsonResponse
@@ -55,6 +56,8 @@ def packageview(request):
   user_profile=request.user
   global day
   global destination
+  global listoflandscapes
+  listoflandscapes=['Beach','Temple','Mosque','Market','Pond','Shopping centre','Park','Museum','Waterfall','Reservoir','Dam','Amusement park','Planetarium','Tourist attractions','Cinema theatre','Bird watching area','Fort','Hill station','Zoo','Garden','Wildlife park','View point','Island','Water bodies','River','Church','Palace','Animal park']
   if 'itinerary' in request.POST:
       #print("package_details_list 1st time->", mainpackagedict)
       print("entering inside ITINERARYFORM in packageview if ")
@@ -118,7 +121,7 @@ def packageview(request):
     print("rendering tourpackages-html in packageview ELIF")
     print("destination:",destination)
       
-    return render(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination,},)
+    return render(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination,'listoflandscapes':listoflandscapes},)
   
   else:
     '''
@@ -133,7 +136,7 @@ def packageview(request):
     print("entering inside packageview ELSE")
     print("rendering tourpackages-html in packageview ELSE")
     print("destination:",destination)
-    return render(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination})
+    return render(request,'tour-packages.html',{'mainpackagedict':mainpackagedict,'day':day,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination,'listoflandscapes':listoflandscapes})
 
 @login_required
 def itineraryviewagain(request):
@@ -142,7 +145,7 @@ def itineraryviewagain(request):
     print("destination:",destination)
     user_profile=request.user 
     #print("choosen package dict at itineraryviewagain->",choosen_package_dict)
-    return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile,'district':destination})
+    return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile,'district':destination,'listoflandscapes':listoflandscapes,'mainpackagedictcopy':mainpackagedictcopy,'mainpackagedict':mainpackagedict,})
   
 
 @login_required
@@ -197,7 +200,7 @@ def itineraryview(request, mainpackagedict,):
     print("rendering tourpackages-html in itineraryview IF")
     print("destination:",destination)
     print("choosenpackagedict in itinerary view:",choosen_package_dict)
-    return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile,'district':destination})
+    return render(request,'itinerary.html',{'choosen_package_dict':choosen_package_dict,'user_profile':user_profile,'district':destination,'listoflandscapes':listoflandscapes,'mainpackagedictcopy':mainpackagedictcopy,'mainpackagedict':mainpackagedict,})
 
 @login_required                 
 def landscapeview(request):
@@ -206,7 +209,7 @@ def landscapeview(request):
    print("rendering tourpackages-html in landscapeview")
    print("destination:",destination)
    user_profile=request.user
-   return render(request,'landscape-packages.html',{'mainpackagedictcopy':mainpackagedictcopy,'day':day,'landscapelist':landscapelist,'temppackagedictcopy':temppackagedictcopy,'mainpackagedict':mainpackagedict,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination})
+   return render(request,'landscape-packages.html',{'mainpackagedictcopy':mainpackagedictcopy,'day':day,'landscapelist':landscapelist,'temppackagedictcopy':temppackagedictcopy,'mainpackagedict':mainpackagedict,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination,'listoflandscapes':listoflandscapes})
 
 @login_required
 def landscapefilter(request,mainpackagedictcopy,temppackagedictcopy,day):
@@ -261,7 +264,7 @@ def landscapefilter(request,mainpackagedictcopy,temppackagedictcopy,day):
         '''               
         print("rendering tourpackages-html in landscapefilter IF")
         print("destination:",destination)
-        return render(request,'landscape-packages.html',{'mainpackagedictcopy':mainpackagedictcopy,'day':day,'landscapelist':landscapelist,'temppackagedictcopy':temppackagedictcopy,'mainpackagedict':mainpackagedict,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination})
+        return render(request,'landscape-packages.html',{'mainpackagedictcopy':mainpackagedictcopy,'day':day,'landscapelist':landscapelist,'temppackagedictcopy':temppackagedictcopy,'mainpackagedict':mainpackagedict,'temppackagedict':temppackagedict,'user_profile':user_profile,'district':destination,'listoflandscapes':listoflandscapes})
 
 @login_required      
 def spotdetailsview(request,spotname_copy,):
@@ -324,9 +327,14 @@ def spotdetailsview(request,spotname_copy,):
    return render(request,"itinerary-spot-details.html",{'spotdetails_spotname':spotdetails_spotname,'user_profile':user_profile,'spotdetailsdict':spotdetailsdict,'spotreviewdetailsdict':spotreviewdetailsdict,'district':destination})
 
 def mapview(request,day_key_value):
+  user_profile=request.user
   print("choosen package dict in map view",choosen_package_dict)
   map_package_dict=choosen_package_dict[day_key_value]
   print("choosen package dict in map view",map_package_dict)
+  geocoder=Nominatim(user_agent="tpw")
+  gcode=ArcGIS()
+  #loc1="Kozhikode Beach"
+  #loc2="Thikkodi drive-in beach"
   '''
   gcode=ArcGIS()
   place_name="Kozhikode Beach"
@@ -364,22 +372,79 @@ def mapview(request,day_key_value):
       'spotname':map_package_list
   }
   '''
-  value=1
+  lat_long_list=[]
+  value=0
   for key,items in map_package_dict.items():
      print("value now:",value)
+     loc1=items[5]
+     lat=geocoder.geocode(loc1).latitude
+     long=geocoder.geocode(loc1).longitude
+     lat_long_dict={'latitude':lat,'longitude':long}
+     lat_long_list.append(lat_long_dict)
+     print("listappended")
+     value=value+1
+     if value==3:
+        break
+     '''
      if value==1:
         Morning=items
+        Morningloc=items[5]
+        print("morningloc:",Morningloc)
+        print("loc1:",loc1)
+        cord1=geocoder.geocode(loc2)
+        print("cord1:",cord1)
+        Morninglat=cord1.latitude
+        Morninglong=cord1.longitude
      elif value==2:
         Afternoon=items
      elif value==3:
         Evening=items
      value=value+1
-  print("\n Morning time:",Morning)
-  print("\n Afternoon time:",Afternoon)   
-  print("\n Evening time:",Evening) 
+     print("\n Morning time:",Morning)
+     print("\n Afternoon time:",Afternoon)   
+     print("\n Evening time:",Evening) 
+     '''
+     
+  #lat_long_list=[{'latitude': 11.255534762482503, 'longitude': 75.76633491897731}, {'latitude': 11.253835976496681, 'longitude': 75.78246464851674}, {'latitude': 11.24884769802104, 'longitude': 75.83385923323074}]
+  list10=["hi","1332",23932]
+  print("list10:",list10)
+  print("tyoe of list10:",type(list10))
+  11.255534762482503, 75.76633491897731
+  11.253835976496681, 75.78246464851674
+  11.24884769802104, 75.83385923323074
+  print("latlonglist:",lat_long_list)
+  #print("morningloclong:",Morninglong)
+  #print("tyoe of morning:",type(loc1))
   #selected_map_package_dict={'Morning':Morning,'Afternoon':Afternoon,'Evening':Evening}
-  return render(request,"maps.html",{'day_key_value':day_key_value,'choosen_package_dict':choosen_package_dict,'map_package_list':map_package_dict,'Mornings':Morning,'Afternoons':Afternoon,'Evenings':Evening})
+  return render(request,"maps.html",{'day_key_value':day_key_value,'choosen_package_dict':choosen_package_dict,'map_package_list':map_package_dict,'user_profile':user_profile,'list10':list10,'lat_long_list':lat_long_list})
     
+@login_required  
+def listofaccommodationsview(request,district):
+  listoflandscapes=['Beach','Temple','Mosque','Market','Pond','Shopping centre','Park','Museum','Waterfall','Reservoir','Dam','Amusement park','Planetarium','Tourist attractions','Cinema theatre','Bird watching area','Fort','Hill station','Zoo','Garden','Wildlife park','View point','Island','Water bodies','River','Church','Palace','Animal park']
+  accommodation_district = district
+  user_profile=request.user
+  accommodationdetailsdict=dict()
+  accommodationdetailslist=Accommodationdetailstable.objects.filter(district=accommodation_district).all()
+  number=0
+  print("accommodationdetailslist ***************",accommodationdetailslist)
+  for accommodationcenter in accommodationdetailslist:
+    number=number+1
+    accommodationkey="Accommodation"+str(number)
+    accommodationdetailstempdict=[
+        accommodationcenter.name,                 #0
+        accommodationcenter.district,             #1  
+        accommodationcenter.location,             #2
+        accommodationcenter.lowest_rate,          #3
+        accommodationcenter.highest_rate,         #4
+        accommodationcenter.accommodation_image1, #5
+        accommodationcenter.accommodation_image2, #6
+        accommodationcenter.restaurant,           #7
+    ]
+    accommodationdetailsdict[accommodationkey]=accommodationdetailstempdict
+  print("accommodationdetailsdict",accommodationdetailsdict)
+  #accommodationlist=Tourpackage.objects.filter(district=destination,packagecategory=day)
+  return render(request,"acco-list.html",{'accommodation_district':accommodation_district,'user_profile':user_profile,'accommodationdetailsdict':accommodationdetailsdict,'listoflandscapes':listoflandscapes,'mainpackagedictcopy':mainpackagedictcopy,'mainpackagedict':mainpackagedict,'choosen_package_dict':choosen_package_dict,})
+
 def createpackageview(request):
    print("day createpackageview",day)
    print("destinaton createpackageview",destination)
