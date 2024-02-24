@@ -134,14 +134,21 @@
         </nav>
 
         <main class="content">
-          <div>daykeyvalue:{{day_key_value}}</div>
+          <div class="card-header">
+            <h1 style="text-align: center">{{day_key_value}}</h1>
+            
+          </div>
           <br>
-          <div>choosen_package_dict:{{choosen_package_dict}}</div>
+          <!--
+            <div>choosen_package_dict:{{choosen_package_dict}}</div>
           <br>
           <div>map_package_dict:{{map_package_list}}</div>
           <br>
           <div>Morning time:{{Mornings}}</div>
-          <div id="map1" style="height: 600px; width:800px;">
+          -->
+          
+          <!-- MAP PART-->
+          <div id="map1" style="height: 80vh; width: 80vw;">
           </div>
 
 
@@ -152,19 +159,34 @@
 
 
           <script>
-            var map = L.map('map1').setView([11.2626, 75.7673], 13);
+            var map = L.map('map1').setView([11.2626, 75.7673], 11);
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
             let lat_long_list=JSON.parse(document.getElementById('lat_long_list_json').textContent)
             console.log(lat_long_list)
+            let a=1
             lat_long_list.forEach(
               lat_long_marker =>{
-                L.marker([lat_long_marker.latitude,lat_long_marker.longitude]).addTo(map)
-              }
-            )
+                L.marker([lat_long_marker.latitude,lat_long_marker.longitude]).addTo(map).bindPopup(lat_long_marker.spotname);
+                console.log('cord'+a)
+                cordinate='cord'+a
+                cordinate=[lat_long_marker.latitude,lat_long_marker.longitude];
+                a=a+1;
+                console.log(cordinate)
+              })
+            
+              cordinate0=[lat_long_list[0].latitude,lat_long_marker[0].longitude];
+              cordinate1=[lat_long_list[1].latitude,lat_long_marker[1].longitude];
+              cordinate2=[lat_long_list[2].latitude,lat_long_marker[2].longitude];
+              var polyline1=L.polyline([cordinate0,cordinate1]).addTo(map);
+              map.fitBounds(polyline1.getBounds());
+
+
           </script>
+
+          <!-- MAP PART-->
           <br>
           
           <br>

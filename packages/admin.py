@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Destination,Onedaypackage,Twodaypackage,Threedaypackage,Fourdaypackage,Fivedaypackage,Sixdaypackage,Sevendaypackage,Tourpackage
+from .models import Destination,Tourpackage
 
 # Register your models here.
 

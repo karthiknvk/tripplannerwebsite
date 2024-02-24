@@ -93,7 +93,9 @@ def packageview(request):
                       package.spotname.landscape,       #7
                       package.spotname.cafespot,        #8
                       package.spotname.description,     #9
-                      package.spotname.img              #10
+                      package.spotname.img,             #10
+                      package.spotname.latitude,        #11
+                      package.spotname.longitude,       #12
                       ]
       #print("packagelist->",packagelist,"\n")
       if key not in mainpackagedict:
@@ -331,8 +333,8 @@ def mapview(request,day_key_value):
   print("choosen package dict in map view",choosen_package_dict)
   map_package_dict=choosen_package_dict[day_key_value]
   print("choosen package dict in map view",map_package_dict)
-  geocoder=Nominatim(user_agent="tpw")
-  gcode=ArcGIS()
+  #geocoder=Nominatim(user_agent="tpw")
+  #gcode=ArcGIS()
   #loc1="Kozhikode Beach"
   #loc2="Thikkodi drive-in beach"
   '''
@@ -377,11 +379,15 @@ def mapview(request,day_key_value):
   for key,items in map_package_dict.items():
      print("value now:",value)
      loc1=items[5]
-     lat=geocoder.geocode(loc1).latitude
-     long=geocoder.geocode(loc1).longitude
-     lat_long_dict={'latitude':lat,'longitude':long}
+     print("Latitude",items[5],"=",items[11])
+     lat=items[11]
+     print("Longitude",items[5],"=",items[12])
+     long=items[12]
+     spotname=items[5].spotname
+     lat_long_dict={'spotname':items[5].spotname,'latitude':lat,'longitude':long}
      lat_long_list.append(lat_long_dict)
-     print("listappended")
+     print("lspotname",spotname)
+     print("listappended",lat_long_dict)
      value=value+1
      if value==3:
         break
