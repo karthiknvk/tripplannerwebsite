@@ -2,21 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from . models import CustomUser
-# Create your views here.
 
-'''
-def index(request):
-  if request.method=="POST":
-    if 'login' in request.POST:
-      return loginview(request)
-    elif 'signup' in request.POST:
-      return signupview(request)
-  else:
-    django_messages = messages.get_messages(request)
-    return render(request,"index.html", {'django_messages': django_messages})
-'''
-
-  
+#user signup
 def signupview(request):
   if request.method=='POST':
     username=request.POST['username']
@@ -49,8 +36,7 @@ def signupview(request):
     django_messages = messages.get_messages(request)
     return render(request,"signup.html",{'django_messages': django_messages})
   
-
-
+#user login
 def loginview(request):
   if request.method=='POST':
     username=request.POST["username"]
@@ -74,8 +60,7 @@ def loginview(request):
     django_messages = messages.get_messages(request)
     return render(request,"login.html",{'django_messages': django_messages})
 
-
-
+#user profile updation function
 def profileupdationview(request):
   user_profile=request.user
   if request.method=="POST" and 'updateprofile' in request.POST: 
@@ -114,3 +99,15 @@ def profileupdationview(request):
     return render(request,"pages-profile-update.html",{'user_profile':user_profile})
 
 
+# Create your views here.
+'''
+def index(request):
+  if request.method=="POST":
+    if 'login' in request.POST:
+      return loginview(request)
+    elif 'signup' in request.POST:
+      return signupview(request)
+  else:
+    django_messages = messages.get_messages(request)
+    return render(request,"index.html", {'django_messages': django_messages})
+'''

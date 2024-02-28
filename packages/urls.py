@@ -15,7 +15,7 @@ urlpatterns=[
   path('itineraryviewagain',views.itineraryviewagain,name='itineraryviewagain'),
   path('spotdetailsview/<str:spotname_copy>/',views.spotdetailsview,name='spotdetailsview'),
   path('mapview/<str:day_key_value>/',views.mapview,name='mapview'),
-  path('createpackageview',views.createpackageview,name='createpackageview'),
+  #path('createpackageview',views.createpackageview,name='createpackageview'),
   path('listofaccommodationsview/<str:district>/',views.listofaccommodationsview,name='listofaccommodationsview'),
   #path('budgetview',views.budgetview,name='budgetview'),#budgetview=is path given in url,name=budgetviewpackages=is name used to refer it in other places
   #path('destinationview',views.destinationview,name='destinationview'),

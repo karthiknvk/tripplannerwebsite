@@ -8,9 +8,9 @@ from packages.models import Destination
 
 spotreviewdetailsdict=dict()
 
+#adding review function
 @login_required
 def addreview(request):
-  #print("entered addreview function succesfully")
   user_profile=request.user
   if request.method=="POST":
     spotdistrict=request.POST.get('spotdistrict')
@@ -18,7 +18,6 @@ def addreview(request):
     content=request.POST.get('content')
     review_image1=request.FILES.get('review_image1')
     review_image2=request.FILES.get('review_image2')
-    #print("deatils colected succesfully")
 
     spotname_obj=Destination.objects.get(spotname=spotname2)
     review=Review(
@@ -30,11 +29,9 @@ def addreview(request):
       review_image2=review_image2,
     )
     review.save()
-    #print("review add succesfully by ",user_profile)
-    #print("review_spotname in add review",review_spotname)
-    #print("spotreviewdetailsdict in add review",spotreviewdetailsdict)
     return render(request,'spot-review.html',{'user_profile':user_profile,'review_spotname':review_spotname,'spotreviewdetailsdict':spotreviewdetailsdict})
 
+#review adding form page
 @login_required
 def reviewpage(request,):
   user_profile=request.user
@@ -49,13 +46,11 @@ def reviewpage(request,):
         'spotdistrict':spotreviewdetailslist.spotdistrict,
         'location':spotreviewdetailslist.location,
     }
-    #print("spotname in reviewpage",review_spotname)
-    #print("spotreviewdetailsdict in reviewpage",spotreviewdetailsdict)
   return render(request,'spot-review.html',{'user_profile':user_profile,'review_spotname':review_spotname,'spotreviewdetailsdict':spotreviewdetailsdict})
 
+#review adding form page (view again)
 @login_required
 def reviewpage2(request,review_spotname_copy):
-  #print("review_spotname in add review2",review_spotname_copy)
   global spotreviewdetailsdict
   global review_spotname
   review_spotname=review_spotname_copy
@@ -68,10 +63,9 @@ def reviewpage2(request,review_spotname_copy):
         'spotdistrict':spotreviewdetailslist.spotdistrict,
         'location':spotreviewdetailslist.location,
   }
-  #print("spotname in reviewpage2",review_spotname)
-  #print("spotreviewdetailsdict in reviewpage2",spotreviewdetailsdict)
   return render(request,'spot-review.html',{'user_profile':user_profile,'review_spotname':review_spotname,'spotreviewdetailsdict':spotreviewdetailsdict})
 
+#add new spot function
 @login_required
 def addspot(request):
   user_profile=request.user
@@ -83,12 +77,8 @@ def addspot(request):
     newspotimage1=request.FILES.get("newspotimage1")
     newspotimage2=request.FILES.get("newspotimage2")
     newspotimage3=request.FILES.get("newspotimage3")
-    print("newspotimage1=",newspotimage1)
-    print("newspotimage2=",newspotimage2)
-    print("newspotimage3=",newspotimage3)
 
     if newspotimage1==None and newspotimage2==None and newspotimage3==None:
-      print("it can't be empty")
       messages.error(request, 'Atleast add one image')
       
     else:
@@ -103,7 +93,6 @@ def addspot(request):
         new_spot_image3=newspotimage3,
       )
       newspot.save()
-      print("spot added succesfully by",user_profile)
       messages.success(request, 'Spot added succesfully')
     django_messages = messages.get_messages(request)
     return render(request,'pages-add-spot.html',{'user_profile':user_profile,'django_messages': django_messages})

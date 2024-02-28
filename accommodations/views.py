@@ -4,28 +4,7 @@ from .models import Accommodationdetailstable
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 # Create your views here.
-'''
-def accommodationloginview(request):
-  global user
-  global accommodation
-  user=request.user
-  print("user->",user)
-  accommodationdetailslist=Accommodationdetailstable.objects.filter(user=user).values()
-  print('accommodationdetailslist->',accommodationdetailslist)
-  accommodation=list(accommodationdetailslist)
-  print("accommodation->", accommodation)
-  for i in accommodation:
-    print('id->',i)
-    print('\nname->',i.name,"\n")
-  if accommodationdetailslist:
-    print("accommodation2nd time->", accommodation)
-    print("user have entered details in table")
-    return accommodationaccountview(request)
-  else:
-    print("user have not entered details in table")
-    return accommodationformview(request)
-  
-'''
+
 @login_required
 def accommodationloginview(request):
   global user_profile
@@ -33,13 +12,8 @@ def accommodationloginview(request):
   user_profile=request.user
   if Accommodationdetailstable.objects.filter(user=user_profile).exists():
     accommodation=Accommodationdetailstable.objects.get(user=user_profile)
-    #print("currentuser->", user_profile)
-    #print("accommodation->", accommodation)
-    print("user have entered details in table")
     return accommodationaccountview(request)
   else:
-    #print("currentuser->", user_profile)
-    print("user have not entered details in table")
     return accommodationformview(request)
     
 @login_required  
@@ -47,7 +21,6 @@ def accommodationformview(request):
   user_profile=request.user
   global accommodation
   if request.method == "POST":
-    print("entered into IF statement")
     name=request.POST.get("accommodation_name")
     accommodation_district=request.POST.get("accommodation_district")
     accommodation_location=request.POST.get("accommodation_location")
@@ -60,9 +33,8 @@ def accommodationformview(request):
       restaurant=True
     else:
       restaurant=False
-    #print(name,accommodation_district,accommodation_location,accommodation_lowest_price,accommodation_highest_price,accommodation_restaurant,image1,image2)
     accommodation=Accommodationdetailstable(
-            user=request.user,  # Assuming you are using authentication
+            user=request.user,  
             name=name,
             district=accommodation_district,
             location=accommodation_location,
@@ -73,24 +45,17 @@ def accommodationformview(request):
             accommodation_image2=image2,
     )
     accommodation.save()
-    #print("accommodation user details saved succesfully")
     accommodation=Accommodationdetailstable.objects.get(user=user_profile)
-    print("accommodation in if statement",accommodation)
     return render(request,"acco-profile.html",{'accommodation':accommodation,'user_profile':user_profile})
   elif Accommodationdetailstable.objects.filter(user=user_profile).exists():
-    print("entered into ELIF statement")
     accommodation=Accommodationdetailstable.objects.get(user=user_profile)
-    print("accommodation in ELIF",accommodation)
     return render(request,"acco-form.html",{'accommodation':accommodation,'user_profile':user_profile})
   else:
-    print("entered into ELSE statement")
     return render(request,"acco-form.html",{'user_profile':user_profile})
   
 @login_required 
 def accommodationaccountview(request):
-  #accommodationdetailslist=Accommodationdetailstable.objects.filter(user=user).all()
   global accommodation
-  print("entered into ACCOMMODATIONVIEW function")
   return render(request, "acco-profile.html", {'accommodation': accommodation,'user_profile':user_profile})
   try:
       accommodation = Accommodationdetailstable.objects.get(user=user)
