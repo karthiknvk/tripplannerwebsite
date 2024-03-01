@@ -101,11 +101,20 @@
                   href="#"
                   data-bs-toggle="dropdown"
                 >
-                  <img
-                    src="https://www.freeiconspng.com/thumbs/restaurant-icon-png/restaurant-icon-png-plate-1.png"
-                    class="avatar img-fluid rounded me-1"
-                    alt="Restaurant Name"
-                  />
+                {% if accommodation.accommodation_image1 %}
+                <img
+                  src="{{accommodation.accommodation_image1.url}}"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% else %}
+                <img
+                  src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% endif %}
+
                   <span class="text-dark">{{user_profile.username}}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">
@@ -152,10 +161,10 @@
                   <div class="card-body text-center">
                     <img
                       src="{{accommodation.accommodation_image1.url}}"
-                      alt="Christina Mason"
-                      class="img-fluid rounded-circle mb-2"
-                      width="128"
-                      height="128"
+                      alt="No image available"
+                      class="img rounded mb-2"
+                      width="180px"
+                      height="158px"
                     />
                     <h5 class="card-title mb-0">{{accommodation.name}}</h5>
                     <div class="text-muted mb-2">{{accommodation.location}}</div>
@@ -165,12 +174,12 @@
                     
                     </form>
                     <a href="accommodationformview">
-                    
+                    <button class="btn btn-secondary">Update Details</button>
+                    <hr class="my-0" />
                   </a>
                   -->
                   
-                  <button class="btn btn-secondary">Update Details</button>
-                    <hr class="my-0" />
+                  
                   
                 </div>
               </div>

@@ -109,11 +109,21 @@
                   href="#"
                   data-bs-toggle="dropdown"
                 >
-                  <img
-                    src="https://www.freeiconspng.com/thumbs/restaurant-icon-png/restaurant-icon-png-plate-1.png"
-                    class="avatar img-fluid rounded me-1"
-                    alt="Restaurant Name"
-                  />
+                
+                {% if accommodation.accommodation_image1 %}
+                <img
+                  src="{{accommodation.accommodation_image1.url}}"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% else %}
+                <img
+                  src="https://cdn.iconscout.com/icon/free/png-256/free-user-circle-3609976-3014616.png"
+                  class="avatar img-fluid rounded me-1"
+                  alt="Not available"
+                />
+                {% endif %}
+
                   <span class="text-dark">{{user_profile.username}}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end">

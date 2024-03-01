@@ -11,6 +11,10 @@ def signupview(request):
     password1=request.POST['password']
     password2=request.POST['confirmpassword']
 
+    if username=="" or email=="" or password1=="" or password2=="":
+        print('columns can;t be empty')
+        messages.error(request,"Columns can't be empty")
+        return redirect("/")
     if password1==password2:
       if CustomUser.objects.filter(username=username).exists():
         print('user name exist already')
@@ -33,14 +37,18 @@ def signupview(request):
       return redirect("/")
     
   else:
-    django_messages = messages.get_messages(request)
-    return render(request,"signup.html",{'django_messages': django_messages})
+    user_django_messages = messages.get_messages(request)
+    return render(request,"signup.html",{'user_django_messages': user_django_messages})
   
 #user login
 def loginview(request):
   if request.method=='POST':
     username=request.POST["username"]
     password=request.POST["password"]
+    if username==""  or password=="" :
+        print('columns can;t be empty')
+        messages.error(request, 'Invalid credentials')
+        return redirect('login')
     user=auth.authenticate(username=username,password=password)
     if user is not None:
       auth.login(request,user)
@@ -57,8 +65,9 @@ def loginview(request):
       return redirect('login')
     
   else:
-    django_messages = messages.get_messages(request)
-    return render(request,"login.html",{'django_messages': django_messages})
+    user_django_messages = messages.get_messages(request)
+    print('user_django_messages:',user_django_messages)
+    return render(request,"login.html",{'user_django_messages': user_django_messages})
 
 #user profile updation function
 def profileupdationview(request):
@@ -73,12 +82,18 @@ def profileupdationview(request):
     if username:
       if CustomUser.objects.exclude(id=user_profile.id).filter(username=username).exists():
             messages.error(request, "Username already exists.")
+            user_profile_updation_django_messages = messages.get_messages(request)
+            return render(request,"pages-profile-update.html",
+            {'user_profile':user_profile,'user_profile_updation_django_messages':user_profile_updation_django_messages})
       else:
                 user_profile.username = username
 
     if email:
         if CustomUser.objects.exclude(id=user_profile.id).filter(email=email).exists():
           messages.error(request, "Email already exists.")
+          user_profile_updation_django_messages = messages.get_messages(request)
+          return render(request,"pages-profile-update.html",
+            {'user_profile':user_profile,'user_profile_updation_django_messages':user_profile_updation_django_messages})
         else:
           user_profile.email = email
 
